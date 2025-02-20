@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exclusive Tools Saham</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+        
+        .calculator {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .calculator:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 3px;
+            background: #3498db;
+            border-radius: 2px;
+        }
+        
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 5px;
+            color: #34495e;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 5px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus {
+            border-color: #3498db;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52,152,219,0.2);
+        }
+        
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(52,152,219,0.3);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .result {
+            margin-top: 25px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #3498db;
+            border-radius: 8px;
+            font-size: 0.95em;
+            line-height: 1.6;
+            color: #2c3e50;
+        }
+        
+        .purchase-inputs {
+            margin-bottom: 15px;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            background: #f8f9fa;
+            transition: all 0.3s ease;
+        }
+        
+        .purchase-inputs:hover {
+            border-color: #3498db;
+            background: white;
+        }
+        
+        #purchaseList {
+            margin-bottom: 20px;
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        
+        #purchaseList::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        #purchaseList::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        
+        #purchaseList::-webkit-scrollbar-thumb {
+            background: #3498db;
+            border-radius: 4px;
+        }
+        
+        strong {
+            color: #2980b9;
+        }
+    
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .calculator {
+                padding: 20px;
+            }
+        }
+
+        .profit {
+            color: #2ecc71 !important;
+        }
+        .loss {
+            color: #e74c3c !important;
+        }
+
+        .main-title {
+            grid-column: 1 / -1;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .main-title h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+        
+        .main-title p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+            margin: 0;
+        }
+        
+        .main-title h1::after {
+            width: 100px;
+            height: 4px;
+            bottom: -15px;
+        }
+
+        /* Add SweetAlert custom styles */
+        .swal2-popup {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            border-radius: 15px;
+        }
+        
+        .swal2-title {
+            color: #2c3e50;
+        }
+        
+        .swal2-html-container {
+            color: #34495e;
+        }
+
+        /* Add this to your existing styles */
+        .grid-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .info-box {
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            text-align: center;
+        }
+        
+        .info-box strong {
+            display: block;
+            margin-top: 5px;
+        }
+
+        /* Add these styles for the reset button */
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .reset-btn {
+            background: #e74c3c;
+            padding: 12px;
+            width: auto;
+        }
+        
+        .reset-btn:hover {
+            background: #c0392b;
+        }
+    </style>
+    <!-- Add SweetAlert2 CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="main-title">
+            <h1>Exclusive Tools Saham</h1>
+            <p>Kalkulator untuk analisis investasi saham Anda</p>
+        </div>
+        <div class="calculator">
+            <h1>Kalkulator Keuntungan Saham</h1>
+            <label for="buyPrice">Harga Beli (per lembar):</label>
+            <input type="number" id="buyPrice" placeholder="Masukkan harga beli">
+
+            <label for="sellPrice">Harga Jual (per lembar):</label>
+            <input type="number" id="sellPrice" placeholder="Masukkan harga jual">
+
+            <label for="lot">Jumlah Lot:</label>
+            <input type="number" id="lot" placeholder="Masukkan jumlah lot" value="1">
+
+            <div class="button-group">
+                <button onclick="calculateProfit()">Hitung Keuntungan</button>
+                <button onclick="resetProfitCalculator()" class="reset-btn">Reset</button>
+            </div>
+
+            <div id="result" class="result" style="display:none;"></div>
+        </div>
+
+        <div class="calculator">
+            <h1>Kalkulator Harga Rata-rata</h1>
+            <div id="purchaseList">
+                <div class="purchase-inputs">
+                    <label>Harga Pembelian:</label>
+                    <input type="number" class="price" placeholder="Masukkan harga">
+                    <label>Jumlah Lot:</label>
+                    <input type="number" class="lots" placeholder="Masukkan lot" value="1">
+                </div>
+            </div>
+
+            <button onclick="addPurchase()" style="margin-top: 10px;">Tambah Pembelian Lain</button>
+            <div class="button-group">
+                <button onclick="calculateAverage()">Hitung Rata-rata</button>
+                <button onclick="resetAverageCalculator()" class="reset-btn">Reset</button>
+            </div>
+
+            <div id="averageResult" class="result" style="display:none;"></div>
+        </div>
+
+        <div class="calculator">
+            <h1>Kalkulator Dividen</h1>
+            <label for="stockPrice">Harga Saham:</label>
+            <input type="number" id="stockPrice" placeholder="Masukkan harga saham">
+
+            <label for="dividendAmount">Dividen per Lembar:</label>
+            <input type="number" id="dividendAmount" placeholder="Masukkan jumlah dividen">
+
+            <label for="dividendLot">Jumlah Lot:</label>
+            <input type="number" id="dividendLot" placeholder="Masukkan jumlah lot" value="1">
+
+            <div class="button-group">
+                <button onclick="calculateDividend()">Hitung Dividen</button>
+                <button onclick="resetDividendCalculator()" class="reset-btn">Reset</button>
+            </div>
+
+            <div id="dividendResult" class="result" style="display:none;"></div>
+        </div>
+
+        <div class="calculator">
+            <h1>Kalkulator Beli Saham</h1>
+            <label for="sharePrice">Harga Saham:</label>
+            <input type="number" id="sharePrice" placeholder="Masukkan harga saham">
+
+            <label for="buyLot">Jumlah Lot:</label>
+            <input type="number" id="buyLot" placeholder="Masukkan jumlah lot" value="1">
+
+            <div class="button-group">
+                <button onclick="calculateBuy()">Hitung Total Pembelian</button>
+                <button onclick="resetBuyCalculator()" class="reset-btn">Reset</button>
+            </div>
+
+            <div id="buyResult" class="result" style="display:none;"></div>
+        </div>
+
+        <div class="calculator">
+            <h1>Kalkulator ARA/ARB</h1>
+            <label for="closingPrice">IEP Penutupan:</label>
+            <input type="number" id="closingPrice" placeholder="Masukkan harga penutupan">
+
+            <div class="button-group">
+                <button onclick="calculateARAARB()">Hitung ARA/ARB</button>
+                <button onclick="resetARAARBCalculator()" class="reset-btn">Reset</button>
+            </div>
+
+            <div id="araArbResult" class="result" style="display:none;">
+                <div class="grid-info">
+                    <div class="info-box">
+                        <span>ARA (Auto Reject Atas)</span>
+                        <strong id="araValue"></strong>
+                    </div>
+                    <div class="info-box">
+                        <span>ARB (Auto Reject Bawah)</span>
+                        <strong id="arbValue"></strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function calculateProfit() {
+            const buyPrice = parseFloat(document.getElementById('buyPrice').value);
+            const sellPrice = parseFloat(document.getElementById('sellPrice').value);
+            const lot = parseInt(document.getElementById('lot').value);
+
+            if (isNaN(buyPrice) || isNaN(sellPrice) || isNaN(lot) || lot <= 0) {
+                Swal.fire({
+                    title: 'Input Tidak Valid',
+                    text: 'Mohon masukkan data yang valid.',
+                    icon: 'error',
+                    confirmButtonColor: '#3498db'
+                });
+                return;
+            }
+
+            const sharesPerLot = 100;
+            const totalShares = lot * sharesPerLot;
+            const profitLoss = (sellPrice - buyPrice) * totalShares;
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                Keuntungan: <strong class="${profitLoss > 0 ? 'profit' : ''}">${profitLoss > 0 ? 'Rp ' + profitLoss.toLocaleString() : 'Rp 0'}</strong><br>
+                Kerugian: <strong class="${profitLoss < 0 ? 'loss' : ''}">${profitLoss < 0 ? 'Rp ' + Math.abs(profitLoss).toLocaleString() : 'Rp 0'}</strong>
+            `;
+        }
+
+        function addPurchase() {
+            const purchaseList = document.getElementById('purchaseList');
+            const newPurchase = document.createElement('div');
+            newPurchase.className = 'purchase-inputs';
+            newPurchase.innerHTML = `
+                <label>Harga Pembelian:</label>
+                <input type="number" class="price" placeholder="Masukkan harga">
+                <label>Jumlah Lot:</label>
+                <input type="number" class="lots" placeholder="Masukkan lot" value="1">
+            `;
+            purchaseList.appendChild(newPurchase);
+        }
+
+        function calculateAverage() {
+            const prices = document.getElementsByClassName('price');
+            const lots = document.getElementsByClassName('lots');
+            let totalCost = 0;
+            let totalLots = 0;
+
+            for (let i = 0; i < prices.length; i++) {
+                const price = parseFloat(prices[i].value);
+                const lot = parseInt(lots[i].value);
+
+                if (isNaN(price) || isNaN(lot) || lot <= 0) {
+                    Swal.fire({
+                        title: 'Input Tidak Valid',
+                        text: 'Mohon masukkan data yang valid untuk semua pembelian.',
+                        icon: 'error',
+                        confirmButtonColor: '#3498db'
+                    });
+                    return;
+                }
+
+                totalCost += price * lot * 100;
+                totalLots += lot;
+            }
+
+            const averagePrice = totalCost / (totalLots * 100);
+            const resultDiv = document.getElementById('averageResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                Harga Rata-rata: <strong>Rp ${averagePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</strong><br>
+                Total Lot: <strong>${totalLots}</strong><br>
+                Total Lembar: <strong>${totalLots * 100}</strong><br>
+                Total Investasi: <strong>Rp ${totalCost.toLocaleString()}</strong>
+            `;
+        }
+
+        function calculateDividend() {
+            const stockPrice = parseFloat(document.getElementById('stockPrice').value);
+            const dividendAmount = parseFloat(document.getElementById('dividendAmount').value);
+            const lot = parseInt(document.getElementById('dividendLot').value);
+
+            if (isNaN(stockPrice) || isNaN(dividendAmount) || isNaN(lot) || lot <= 0) {
+                Swal.fire({
+                    title: 'Input Tidak Valid',
+                    text: 'Mohon masukkan data yang valid.',
+                    icon: 'error',
+                    confirmButtonColor: '#3498db'
+                });
+                return;
+            }
+
+            const sharesPerLot = 100;
+            const totalShares = lot * sharesPerLot;
+            const totalDividend = dividendAmount * totalShares;
+            const dividendYield = (dividendAmount / stockPrice) * 100;
+
+            const resultDiv = document.getElementById('dividendResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                Total Dividen: <strong>Rp ${totalDividend.toLocaleString()}</strong><br>
+                Dividend Yield: <strong>${dividendYield.toFixed(2)}%</strong><br>
+                Total Lembar: <strong>${totalShares.toLocaleString()}</strong>
+            `;
+        }
+
+        function calculateBuy() {
+            const sharePrice = parseFloat(document.getElementById('sharePrice').value);
+            const lot = parseInt(document.getElementById('buyLot').value);
+
+            if (isNaN(sharePrice) || isNaN(lot) || lot <= 0) {
+                Swal.fire({
+                    title: 'Input Tidak Valid',
+                    text: 'Mohon masukkan data yang valid.',
+                    icon: 'error',
+                    confirmButtonColor: '#3498db'
+                });
+                return;
+            }
+
+            const sharesPerLot = 100;
+            const totalShares = lot * sharesPerLot;
+            const grossAmount = sharePrice * totalShares;
+            
+            // Biaya transaksi
+            const brokerageFee = grossAmount * 0.0019; // 0.19% fee broker
+            const levy = grossAmount * 0.0001; // 0.01% levy KSEI
+            const vat = brokerageFee * 0.11; // 11% PPN dari fee broker
+            
+            const totalCost = grossAmount + brokerageFee + levy + vat;
+
+            const resultDiv = document.getElementById('buyResult');
+            resultDiv.style.display = 'block';
+            resultDiv.innerHTML = `
+                Nilai Transaksi: <strong>Rp ${grossAmount.toLocaleString()}</strong><br>
+                Fee Broker: <strong>Rp ${brokerageFee.toLocaleString()}</strong><br>
+                Levy KSEI: <strong>Rp ${levy.toLocaleString()}</strong><br>
+                PPN: <strong>Rp ${vat.toLocaleString()}</strong><br>
+                <hr>
+                Total Bayar: <strong>Rp ${totalCost.toLocaleString()}</strong>
+            `;
+        }
+
+        // Add this new function to your existing script
+        function calculateARAARB() {
+            const closingPrice = parseFloat(document.getElementById('closingPrice').value);
+
+            if (isNaN(closingPrice) || closingPrice <= 0) {
+                Swal.fire({
+                    title: 'Input Tidak Valid',
+                    text: 'Mohon masukkan harga penutupan yang valid.',
+                    icon: 'error',
+                    confirmButtonColor: '#3498db'
+                });
+                return;
+            }
+
+            let araPercentage, arbPercentage;
+
+            // Determine ARA/ARB percentages based on price ranges
+            if (closingPrice < 50) {
+                araPercentage = 35;
+                arbPercentage = 35;
+            } else if (closingPrice < 200) {
+                araPercentage = 25;
+                arbPercentage = 25;
+            } else if (closingPrice < 5000) {
+                araPercentage = 20;
+                arbPercentage = 20;
+            } else {
+                araPercentage = 15;
+                arbPercentage = 15;
+            }
+
+            const ara = closingPrice * (1 + (araPercentage / 100));
+            const arb = closingPrice * (1 - (arbPercentage / 100));
+
+            document.getElementById('araArbResult').style.display = 'block';
+            document.getElementById('araValue').textContent = 'Rp ' + ara.toLocaleString(undefined, {maximumFractionDigits: 0});
+            document.getElementById('arbValue').textContent = 'Rp ' + arb.toLocaleString(undefined, {maximumFractionDigits: 0});
+        }
+
+        // Add these new reset functions
+        function resetProfitCalculator() {
+            document.getElementById('buyPrice').value = '';
+            document.getElementById('sellPrice').value = '';
+            document.getElementById('lot').value = '1';
+            document.getElementById('result').style.display = 'none';
+        }
+
+        function resetAverageCalculator() {
+            const purchaseList = document.getElementById('purchaseList');
+            purchaseList.innerHTML = `
+                <div class="purchase-inputs">
+                    <label>Harga Pembelian:</label>
+                    <input type="number" class="price" placeholder="Masukkan harga">
+                    <label>Jumlah Lot:</label>
+                    <input type="number" class="lots" placeholder="Masukkan lot" value="1">
+                </div>
+            `;
+            document.getElementById('averageResult').style.display = 'none';
+        }
+
+        function resetDividendCalculator() {
+            document.getElementById('stockPrice').value = '';
+            document.getElementById('dividendAmount').value = '';
+            document.getElementById('dividendLot').value = '1';
+            document.getElementById('dividendResult').style.display = 'none';
+        }
+
+        function resetBuyCalculator() {
+            document.getElementById('sharePrice').value = '';
+            document.getElementById('buyLot').value = '1';
+            document.getElementById('buyResult').style.display = 'none';
+        }
+
+        function resetARAARBCalculator() {
+            document.getElementById('closingPrice').value = '';
+            document.getElementById('araArbResult').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
