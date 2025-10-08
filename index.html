@@ -1,582 +1,939 @@
 <!DOCTYPE html>
 <html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Exclusive Tools Saham</title>
+    <link
+      rel="preconnect"
+      href="https://fonts.googleapis.com"
+    />
+    <link
+      rel="preconnect"
+      href="https://fonts.gstatic.com"
+      crossorigin
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
     <style>
+      :root {
+        --bg-gradient: linear-gradient(135deg, #111729 0%, #1c2d4d 50%, #20335a 100%);
+        --soft-surface: rgba(255, 255, 255, 0.06);
+        --card-surface: rgba(19, 31, 53, 0.78);
+        --primary: #5b86ff;
+        --primary-strong: #4171ff;
+        --accent: #31d0aa;
+        --text-strong: #f5f7ff;
+        --text-soft: rgba(235, 239, 255, 0.76);
+        --border-subtle: rgba(255, 255, 255, 0.12);
+        --shadow-strong: 0 20px 60px rgba(9, 17, 31, 0.45);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--bg-gradient);
+        color: var(--text-soft);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 0 18px 80px;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      body::before,
+      body::after {
+        content: "";
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(95px);
+        z-index: 0;
+        opacity: 0.6;
+      }
+
+      body::before {
+        width: 480px;
+        height: 480px;
+        background: rgba(93, 134, 255, 0.35);
+        top: -140px;
+        left: -160px;
+      }
+
+      body::after {
+        width: 420px;
+        height: 420px;
+        background: rgba(49, 208, 170, 0.28);
+        bottom: -160px;
+        right: -160px;
+      }
+
+      .page {
+        width: 100%;
+        max-width: 1200px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .floating-orbs span {
+        position: fixed;
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.15), rgba(22, 34, 57, 0));
+        animation: float 12s ease-in-out infinite;
+        opacity: 0.5;
+      }
+
+      .floating-orbs span:nth-child(1) {
+        top: 18%;
+        right: 9%;
+        animation-delay: -2s;
+      }
+
+      .floating-orbs span:nth-child(2) {
+        top: 58%;
+        left: 6%;
+        animation-delay: -6s;
+      }
+
+      .floating-orbs span:nth-child(3) {
+        bottom: 12%;
+        right: 18%;
+        animation-delay: -9s;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate3d(0, 0, 0) scale(1);
+        }
+        50% {
+          transform: translate3d(0, -28px, 0) scale(1.08);
+        }
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 32px 0 12px;
+        position: sticky;
+        top: 0;
+        backdrop-filter: blur(16px);
+        z-index: 5;
+      }
+
+      .navbar {
+        width: 100%;
+        padding: 16px 24px;
+        border-radius: 18px;
+        border: 1px solid var(--border-subtle);
+        background: rgba(18, 29, 50, 0.6);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 18px;
+        box-shadow: var(--shadow-strong);
+      }
+
+      .brand {
+        font-weight: 700;
+        font-size: 1.15rem;
+        letter-spacing: 0.4px;
+        color: var(--text-strong);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .brand span {
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: rgba(91, 134, 255, 0.18);
+        border: 1px solid rgba(91, 134, 255, 0.3);
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+      }
+
+      .nav-links {
+        list-style: none;
+        display: flex;
+        align-items: center;
+        gap: 26px;
+        margin: 0;
+      }
+
+      .nav-links a {
+        text-decoration: none;
+        color: var(--text-soft);
+        font-weight: 500;
+        letter-spacing: 0.2px;
+        transition: color 0.2s ease;
+      }
+
+      .nav-links a:hover,
+      .nav-links a:focus {
+        color: var(--text-strong);
+      }
+
+      .nav-cta {
+        margin-left: auto;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+        padding: 10px 18px;
+        border-radius: 999px;
+        background: linear-gradient(120deg, var(--primary), var(--accent));
+        color: #09111f;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        box-shadow: 0 14px 40px rgba(65, 113, 255, 0.35);
+      }
+
+      .nav-cta:hover,
+      .nav-cta:focus {
+        transform: translateY(-1px);
+        box-shadow: 0 20px 50px rgba(65, 113, 255, 0.45);
+      }
+
+      .nav-toggle {
+        display: none;
+        background: var(--soft-surface);
+        border: 1px solid var(--border-subtle);
+        color: var(--text-strong);
+        padding: 10px 14px;
+        border-radius: 12px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+        gap: 96px;
+        padding-bottom: 40px;
+      }
+
+      .hero {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 48px;
+        align-items: center;
+        padding: 18px 24px 0;
+      }
+
+      .hero h1 {
+        color: var(--text-strong);
+        font-size: clamp(2.6rem, 5vw, 3.7rem);
+        margin-bottom: 18px;
+        letter-spacing: -0.04em;
+      }
+
+      .hero p {
+        margin-bottom: 28px;
+        max-width: 520px;
+        line-height: 1.6;
+        color: var(--text-soft);
+        font-size: 1.05rem;
+      }
+
+      .hero-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+
+      .btn {
+        text-decoration: none;
+        border-radius: 14px;
+        padding: 14px 24px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+      }
+
+      .btn.primary {
+        background: linear-gradient(120deg, var(--primary), var(--primary-strong));
+        color: #061021;
+        box-shadow: 0 18px 45px rgba(65, 113, 255, 0.45);
+      }
+
+      .btn.primary:hover,
+      .btn.primary:focus {
+        transform: translateY(-2px);
+        box-shadow: 0 25px 60px rgba(65, 113, 255, 0.55);
+      }
+
+      .btn.ghost {
+        border: 1px solid var(--border-subtle);
+        color: var(--text-strong);
+        background: rgba(11, 22, 41, 0.6);
+      }
+
+      .btn.ghost:hover,
+      .btn.ghost:focus {
+        transform: translateY(-2px);
+        background: rgba(11, 22, 41, 0.8);
+      }
+
+      .hero-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 18px;
+        margin-top: 38px;
+      }
+
+      .hero-stat {
+        padding: 18px;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(13, 22, 40, 0.65);
+        box-shadow: 0 10px 30px rgba(8, 16, 31, 0.35);
+      }
+
+      .hero-stat strong {
+        display: block;
+        font-size: 1.8rem;
+        color: var(--text-strong);
+      }
+
+      .hero-visual {
+        position: relative;
+        padding: 28px;
+        border-radius: 26px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: linear-gradient(160deg, rgba(91, 134, 255, 0.14), rgba(12, 21, 38, 0.85));
+        box-shadow: 0 25px 60px rgba(10, 18, 32, 0.55);
+      }
+
+      .hero-visual::after {
+        content: "";
+        position: absolute;
+        inset: 16px;
+        border-radius: 22px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        pointer-events: none;
+      }
+
+      .hero-visual h3 {
+        color: var(--text-strong);
+        margin-bottom: 18px;
+      }
+
+      .glance-list {
+        display: grid;
+        gap: 12px;
+      }
+
+      .glance-item {
+        display: flex;
+        gap: 14px;
+        padding: 16px;
+        border-radius: 18px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(8, 17, 35, 0.65);
+      }
+
+      .glance-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 14px;
+        background: rgba(91, 134, 255, 0.16);
+        border: 1px solid rgba(91, 134, 255, 0.3);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+      }
+
+      section {
+        padding: 0 24px;
+      }
+
+      .section-title {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 38px;
+      }
+
+      .section-title span {
+        font-size: 0.85rem;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: rgba(218, 226, 255, 0.55);
+        font-weight: 600;
+      }
+
+      .section-title h2 {
+        font-size: clamp(1.9rem, 3.4vw, 2.6rem);
+        color: var(--text-strong);
+        letter-spacing: -0.03em;
+        margin: 0;
+      }
+
+      .section-title p {
+        max-width: 620px;
+        margin: 0;
+        line-height: 1.6;
+      }
+
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 26px;
+      }
+
+      .tool-card {
+        position: relative;
+        overflow: hidden;
+        text-decoration: none;
+        color: inherit;
+        padding: 28px;
+        border-radius: 22px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(11, 21, 39, 0.72);
+        box-shadow: 0 18px 45px rgba(6, 14, 28, 0.45);
+        transition: transform 0.22s ease, box-shadow 0.22s ease;
+      }
+
+      .tool-card:hover,
+      .tool-card:focus {
+        transform: translateY(-6px);
+        box-shadow: 0 25px 60px rgba(8, 16, 33, 0.55);
+      }
+
+      .tool-card::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(160deg, rgba(91, 134, 255, 0.12), transparent 55%);
+        opacity: 0;
+        transition: opacity 0.22s ease;
+      }
+
+      .tool-card:hover::after,
+      .tool-card:focus::after {
+        opacity: 1;
+      }
+
+      .tool-icon {
+        font-size: 2rem;
+        margin-bottom: 16px;
+      }
+
+      .tool-card h3 {
+        color: var(--text-strong);
+        margin-bottom: 12px;
+      }
+
+      .tool-card p {
+        line-height: 1.6;
+        margin-bottom: 18px;
+      }
+
+      .tool-meta {
+        font-size: 0.82rem;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(6, 14, 28, 0.55);
+        position: relative;
+        z-index: 1;
+      }
+
+      .highlights {
+        background: rgba(10, 19, 36, 0.65);
+        border-radius: 26px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 25px 60px rgba(5, 12, 25, 0.45);
+        padding: 42px;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 24px;
+      }
+
+      .highlight {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .highlight strong {
+        font-size: 1.05rem;
+        color: var(--text-strong);
+      }
+
+      .steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: 18px;
+      }
+
+      .step-card {
+        padding: 26px;
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(10, 20, 38, 0.78);
+        box-shadow: 0 18px 45px rgba(7, 14, 26, 0.4);
+      }
+
+      .step-number {
+        display: inline-flex;
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+        align-items: center;
+        justify-content: center;
+        background: rgba(91, 134, 255, 0.16);
+        border: 1px solid rgba(91, 134, 255, 0.32);
+        color: var(--text-strong);
+        font-weight: 600;
+        margin-bottom: 18px;
+      }
+
+      .faq {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 24px;
+      }
+
+      .faq-item {
+        border-radius: 20px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: rgba(9, 18, 35, 0.72);
+        box-shadow: 0 18px 45px rgba(4, 10, 22, 0.38);
+        padding: 0 24px;
+      }
+
+      .faq-item summary {
+        cursor: pointer;
+        list-style: none;
+        padding: 20px 0;
+        font-weight: 600;
+        color: var(--text-strong);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+      }
+
+      .faq-item summary::after {
+        content: "+";
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s ease;
+      }
+
+      .faq-item[open] summary::after {
+        transform: rotate(45deg);
+      }
+
+      .faq-item p {
+        margin: 0 0 20px;
+        line-height: 1.6;
+        color: rgba(226, 232, 255, 0.78);
+      }
+
+      footer {
+        padding: 42px 24px 0;
+        text-align: center;
+        color: rgba(207, 214, 235, 0.6);
+        font-size: 0.88rem;
+      }
+
+      .cta-panel {
+        margin-top: 42px;
+        padding: 32px;
+        border-radius: 22px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        background: linear-gradient(120deg, rgba(91, 134, 255, 0.25), rgba(9, 17, 31, 0.8));
+        box-shadow: 0 20px 50px rgba(6, 13, 26, 0.42);
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+      }
+
+      .cta-panel h3 {
+        margin: 0;
+        color: var(--text-strong);
+        font-size: 1.5rem;
+      }
+
+      @media (max-width: 980px) {
+        header {
+          padding-top: 24px;
+        }
+
+        .navbar {
+          padding: 12px 18px;
+        }
+
+        .hero {
+          grid-template-columns: 1fr;
+          padding-top: 0;
+        }
+
+        .hero-visual {
+          order: -1;
+        }
+      }
+
+      @media (max-width: 780px) {
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 40px 20px;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: auto;
-            padding: 20px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-        
-        .calculator {
-            background: white;
-            padding: 25px;
-            border-radius: 15px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-        
-        .calculator:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 30px rgba(0,0,0,0.15);
-        }
-        
-        h1 {
-            text-align: center;
-            font-size: 1.5em;
-            color: #2c3e50;
-            margin-bottom: 25px;
-            position: relative;
-        }
-        
-        h1::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 50px;
-            height: 3px;
-            background: #3498db;
-            border-radius: 2px;
-        }
-        
-        label {
-            display: block;
-            margin-top: 15px;
-            margin-bottom: 5px;
-            color: #34495e;
-            font-weight: 500;
-            font-size: 0.9em;
-        }
-        
-        input {
-            width: 100%;
-            padding: 12px;
-            margin-top: 5px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            box-sizing: border-box;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-        
-        input:focus {
-            border-color: #3498db;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(52,152,219,0.2);
-        }
-        
-        button {
-            margin-top: 20px;
-            width: 100%;
-            padding: 12px;
-            background: #3498db;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 600;
-            text-transform: uppercase;
-            font-size: 0.9em;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-        }
-        
-        button:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(52,152,219,0.3);
-        }
-        
-        button:active {
-            transform: translateY(0);
-        }
-        
-        .result {
-            margin-top: 25px;
-            padding: 15px;
-            background: #f8f9fa;
-            border-left: 4px solid #3498db;
-            border-radius: 8px;
-            font-size: 0.95em;
-            line-height: 1.6;
-            color: #2c3e50;
-        }
-        
-        .purchase-inputs {
-            margin-bottom: 15px;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            background: #f8f9fa;
-            transition: all 0.3s ease;
-        }
-        
-        .purchase-inputs:hover {
-            border-color: #3498db;
-            background: white;
-        }
-        
-        #purchaseList {
-            margin-bottom: 20px;
-            max-height: 300px;
-            overflow-y: auto;
-            padding-right: 5px;
-        }
-        
-        #purchaseList::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        #purchaseList::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 4px;
-        }
-        
-        #purchaseList::-webkit-scrollbar-thumb {
-            background: #3498db;
-            border-radius: 4px;
-        }
-        
-        strong {
-            color: #2980b9;
-        }
-    
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-            
-            .calculator {
-                padding: 20px;
-            }
+          padding: 0 14px 60px;
         }
 
-        .profit {
-            color: #2ecc71 !important;
-        }
-        .loss {
-            color: #e74c3c !important;
+        header {
+          position: static;
+          backdrop-filter: none;
         }
 
-        .main-title {
-            grid-column: 1 / -1;
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        .main-title h1 {
-            font-size: 2.5em;
-            margin-bottom: 10px;
-            color: #2c3e50;
-        }
-        
-        .main-title p {
-            color: #7f8c8d;
-            font-size: 1.1em;
-            margin: 0;
-        }
-        
-        .main-title h1::after {
-            width: 100px;
-            height: 4px;
-            bottom: -15px;
+        .navbar {
+          position: relative;
+          flex-wrap: wrap;
+          gap: 14px;
         }
 
-        /* Add SweetAlert custom styles */
-        .swal2-popup {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            border-radius: 15px;
-        }
-        
-        .swal2-title {
-            color: #2c3e50;
-        }
-        
-        .swal2-html-container {
-            color: #34495e;
+        .nav-links {
+          width: 100%;
+          flex-direction: column;
+          align-items: flex-start;
+          display: none;
+          padding-top: 12px;
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
         }
 
-        /* Add this to your existing styles */
-        .grid-info {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            margin-top: 15px;
-        }
-        
-        .info-box {
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 6px;
-            text-align: center;
-        }
-        
-        .info-box strong {
-            display: block;
-            margin-top: 5px;
+        .nav-links.active {
+          display: flex;
         }
 
-        /* Add these styles for the reset button */
-        .button-group {
-            display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 10px;
-            margin-top: 20px;
+        .nav-cta {
+          width: 100%;
+          justify-content: center;
         }
-        
-        .reset-btn {
-            background: #e74c3c;
-            padding: 12px;
-            width: auto;
+
+        .nav-toggle {
+          display: inline-flex;
+          margin-left: auto;
         }
-        
-        .reset-btn:hover {
-            background: #c0392b;
+      }
+
+      @media (max-width: 540px) {
+        .hero-actions {
+          flex-direction: column;
+          align-items: stretch;
         }
+
+        .hero-stats {
+          grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        }
+
+        .cta-panel {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+      }
     </style>
-    <!-- Add SweetAlert2 CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-</head>
-<body>
-    <div class="container">
-        <div class="main-title">
-            <h1>Exclusive Tools Saham</h1>
-            <p>Kalkulator untuk analisis investasi saham Anda</p>
-        </div>
-        <div class="calculator">
-            <h1>Kalkulator Keuntungan Saham</h1>
-            <label for="buyPrice">Harga Beli (per lembar):</label>
-            <input type="number" id="buyPrice" placeholder="Masukkan harga beli">
+  </head>
+  <body>
+    <div class="floating-orbs" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
 
-            <label for="sellPrice">Harga Jual (per lembar):</label>
-            <input type="number" id="sellPrice" placeholder="Masukkan harga jual">
+    <div class="page">
+      <header>
+        <nav class="navbar" aria-label="Navigasi utama">
+          <a class="brand" href="#top">
+            Exclusive Tools
+            <span>V5</span>
+          </a>
+          <button
+            class="nav-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="nav-links"
+          >
+            Menu
+          </button>
+          <ul class="nav-links" id="nav-links">
+            <li><a href="#hero">Beranda</a></li>
+            <li><a href="#kalkulator">Menu Kalkulator</a></li>
+            <li><a href="#panduan">Panduan</a></li>
+            <li><a href="#faq">FAQ</a></li>
+          </ul>
+          <a class="nav-cta" href="#kalkulator">Coba Sekarang</a>
+        </nav>
+      </header>
 
-            <label for="lot">Jumlah Lot:</label>
-            <input type="number" id="lot" placeholder="Masukkan jumlah lot" value="1">
-
-            <div class="button-group">
-                <button onclick="calculateProfit()">Hitung Keuntungan</button>
-                <button onclick="resetProfitCalculator()" class="reset-btn">Reset</button>
+      <main>
+        <section class="hero" id="hero">
+          <div>
+            <h1>Optimalkan Keputusan Investasi Saham Anda</h1>
+            <p>
+              Kumpulan kalkulator saham eksklusif untuk membantu investor ritel
+              mengevaluasi potensi keuntungan, menghitung biaya transaksi, hingga
+              merencanakan dividen dengan cepat dan akurat.
+            </p>
+            <div class="hero-actions">
+              <a class="btn primary" href="#kalkulator">Mulai Hitung</a>
+              <a class="btn ghost" href="#faq">Butuh Bantuan?</a>
             </div>
-
-            <div id="result" class="result" style="display:none;"></div>
-        </div>
-
-        <div class="calculator">
-            <h1>Kalkulator Harga Rata-rata</h1>
-            <div id="purchaseList">
-                <div class="purchase-inputs">
-                    <label>Harga Pembelian:</label>
-                    <input type="number" class="price" placeholder="Masukkan harga">
-                    <label>Jumlah Lot:</label>
-                    <input type="number" class="lots" placeholder="Masukkan lot" value="1">
+            <div class="hero-stats" aria-label="Statistik ringkas">
+              <div class="hero-stat">
+                <strong>5+</strong>
+                Kalkulator lengkap siap pakai untuk berbagai skenario investasi.
+              </div>
+              <div class="hero-stat">
+                <strong>100%</strong>
+                Fokus pada investor ritel yang membutuhkan keputusan lebih cepat.
+              </div>
+              <div class="hero-stat">
+                <strong>Realtime</strong>
+                Hasil hitung instan tanpa perlu spreadsheet yang rumit.
+              </div>
+            </div>
+          </div>
+          <div class="hero-visual" role="presentation">
+            <h3>Gambaran Sekilas</h3>
+            <div class="glance-list">
+              <div class="glance-item">
+                <div class="glance-icon">⚡️</div>
+                <div>
+                  <strong>Hitung Dalam Detik</strong>
+                  <p>Masukkan data transaksi dan dapatkan ringkasan otomatis.</p>
                 </div>
-            </div>
-
-            <button onclick="addPurchase()" style="margin-top: 10px;">Tambah Pembelian Lain</button>
-            <div class="button-group">
-                <button onclick="calculateAverage()">Hitung Rata-rata</button>
-                <button onclick="resetAverageCalculator()" class="reset-btn">Reset</button>
-            </div>
-
-            <div id="averageResult" class="result" style="display:none;"></div>
-        </div>
-
-        <div class="calculator">
-            <h1>Kalkulator Dividen</h1>
-            <label for="stockPrice">Harga Saham:</label>
-            <input type="number" id="stockPrice" placeholder="Masukkan harga saham">
-
-            <label for="dividendAmount">Dividen per Lembar:</label>
-            <input type="number" id="dividendAmount" placeholder="Masukkan jumlah dividen">
-
-            <label for="dividendLot">Jumlah Lot:</label>
-            <input type="number" id="dividendLot" placeholder="Masukkan jumlah lot" value="1">
-
-            <div class="button-group">
-                <button onclick="calculateDividend()">Hitung Dividen</button>
-                <button onclick="resetDividendCalculator()" class="reset-btn">Reset</button>
-            </div>
-
-            <div id="dividendResult" class="result" style="display:none;"></div>
-        </div>
-
-        <div class="calculator">
-            <h1>Kalkulator Beli Saham</h1>
-            <label for="sharePrice">Harga Saham:</label>
-            <input type="number" id="sharePrice" placeholder="Masukkan harga saham">
-
-            <label for="buyLot">Jumlah Lot:</label>
-            <input type="number" id="buyLot" placeholder="Masukkan jumlah lot" value="1">
-
-            <div class="button-group">
-                <button onclick="calculateBuy()">Hitung Total Pembelian</button>
-                <button onclick="resetBuyCalculator()" class="reset-btn">Reset</button>
-            </div>
-
-            <div id="buyResult" class="result" style="display:none;"></div>
-        </div>
-
-        <div class="calculator">
-            <h1>Kalkulator ARA/ARB</h1>
-            <label for="closingPrice">IEP Penutupan:</label>
-            <input type="number" id="closingPrice" placeholder="Masukkan harga penutupan">
-
-            <div class="button-group">
-                <button onclick="calculateARAARB()">Hitung ARA/ARB</button>
-                <button onclick="resetARAARBCalculator()" class="reset-btn">Reset</button>
-            </div>
-
-            <div id="araArbResult" class="result" style="display:none;">
-                <div class="grid-info">
-                    <div class="info-box">
-                        <span>ARA (Auto Reject Atas)</span>
-                        <strong id="araValue"></strong>
-                    </div>
-                    <div class="info-box">
-                        <span>ARB (Auto Reject Bawah)</span>
-                        <strong id="arbValue"></strong>
-                    </div>
+              </div>
+              <div class="glance-item">
+                <div class="glance-icon">🧭</div>
+                <div>
+                  <strong>Menu Terstruktur</strong>
+                  <p>Navigasi mudah antara kalkulator keuntungan, dividen, dan lainnya.</p>
                 </div>
+              </div>
+              <div class="glance-item">
+                <div class="glance-icon">🔒</div>
+                <div>
+                  <strong>Tanpa Login</strong>
+                  <p>Langsung gunakan tanpa perlu membuat akun tambahan.</p>
+                </div>
+              </div>
             </div>
-        </div>
+          </div>
+        </section>
+
+        <section id="kalkulator">
+          <div class="section-title">
+            <span>Menu Kalkulator</span>
+            <h2>Pilih Kalkulator yang Sesuai Kebutuhan Anda</h2>
+            <p>
+              Setiap kalkulator dirancang dengan rumus valid dan parameter terbaru
+              dari pasar modal Indonesia, sehingga Anda dapat menganalisis transaksi
+              dengan percaya diri.
+            </p>
+          </div>
+          <div class="card-grid">
+            <a class="tool-card" href="profit-calculator.html">
+              <div class="tool-icon">📈</div>
+              <h3>Kalkulator Keuntungan</h3>
+              <p>
+                Evaluasi profit atau loss dari jual beli saham setelah biaya dan
+                pajak.
+              </p>
+              <span class="tool-meta">Termasuk analisis break-even</span>
+            </a>
+            <a class="tool-card" href="average-calculator.html">
+              <div class="tool-icon">📊</div>
+              <h3>Kalkulator Harga Rata-Rata</h3>
+              <p>
+                Gabungkan beberapa pembelian untuk mengetahui average price terbaru.
+              </p>
+              <span class="tool-meta">Cocok untuk averaging down</span>
+            </a>
+            <a class="tool-card" href="dividend-calculator.html">
+              <div class="tool-icon">💰</div>
+              <h3>Kalkulator Dividen</h3>
+              <p>
+                Hitung dividend yield dan estimasi pemasukan tahunan berdasarkan
+                kepemilikan saham.
+              </p>
+              <span class="tool-meta">Dukung rencana passive income</span>
+            </a>
+            <a class="tool-card" href="buy-calculator.html">
+              <div class="tool-icon">🛒</div>
+              <h3>Kalkulator Beli Saham</h3>
+              <p>
+                Estimasikan total modal yang dibutuhkan lengkap dengan fee broker.
+              </p>
+              <span class="tool-meta">Termasuk biaya transaksi</span>
+            </a>
+            <a class="tool-card" href="ara-arb-calculator.html">
+              <div class="tool-icon">⚡</div>
+              <h3>Kalkulator ARA/ARB</h3>
+              <p>
+                Ketahui batas Auto Reject Atas dan Bawah untuk mitigasi risiko harga.
+              </p>
+              <span class="tool-meta">Mengikuti regulasi BEI</span>
+            </a>
+          </div>
+        </section>
+
+        <section id="panduan">
+          <div class="section-title">
+            <span>Panduan Singkat</span>
+            <h2>Maksimalkan Pengalaman Anda</h2>
+            <p>
+              Ikuti langkah sederhana berikut agar setiap kalkulator memberikan hasil
+              analisis yang akurat dan mudah dipahami.
+            </p>
+          </div>
+          <div class="steps">
+            <div class="step-card">
+              <span class="step-number">1</span>
+              <h3>Masukkan Data Valid</h3>
+              <p>
+                Pastikan jumlah lot, harga, dan parameter lain sesuai catatan transaksi
+                Anda agar rumus berjalan sempurna.
+              </p>
+            </div>
+            <div class="step-card">
+              <span class="step-number">2</span>
+              <h3>Cek Ringkasan Hasil</h3>
+              <p>
+                Setiap kalkulator menampilkan highlight hasil sehingga Anda bisa langsung
+                memahami implikasinya tanpa membaca tabel panjang.
+              </p>
+            </div>
+            <div class="step-card">
+              <span class="step-number">3</span>
+              <h3>Bandingkan Skenario</h3>
+              <p>
+                Ubah variabel dengan cepat untuk mensimulasikan berbagai kemungkinan dan
+                mengambil keputusan terbaik.
+              </p>
+            </div>
+          </div>
+          <div class="highlights" style="margin-top: 32px;">
+            <div class="highlight">
+              <strong>Selalu Up-to-date</strong>
+              <p>Formula diperbarui mengikuti ketentuan terbaru pasar modal domestik.</p>
+            </div>
+            <div class="highlight">
+              <strong>Tanpa Instalasi</strong>
+              <p>Seluruh kalkulator berjalan langsung di browser, kompatibel di desktop maupun mobile.</p>
+            </div>
+            <div class="highlight">
+              <strong>Output yang Mudah Dibaca</strong>
+              <p>Ringkasan hasil disusun agar mudah dibagikan kepada rekan analis atau klien.</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="faq">
+          <div class="section-title">
+            <span>Pertanyaan Umum</span>
+            <h2>FAQ</h2>
+            <p>
+              Temukan jawaban atas pertanyaan yang paling sering diajukan terkait penggunaan
+              Exclusive Tools Saham.
+            </p>
+          </div>
+          <div class="faq">
+            <details class="faq-item">
+              <summary>Apakah data saya tersimpan di server?</summary>
+              <p>
+                Tidak. Seluruh kalkulator berjalan di sisi klien dan tidak menyimpan data Anda.
+                Semua perhitungan dilakukan langsung di peramban.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>Bagaimana cara memilih kalkulator yang tepat?</summary>
+              <p>
+                Gunakan kalkulator keuntungan untuk menilai transaksi jual-beli, kalkulator dividen
+                untuk menghitung potensi passive income, serta kalkulator ARA/ARB untuk memantau batas
+                harga harian.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>Apakah formula yang digunakan mengikuti aturan BEI?</summary>
+              <p>
+                Ya. Rumus dan parameter fee mengikuti ketentuan Bursa Efek Indonesia terkini. Anda dapat
+                menyesuaikan angka fee jika ada perubahan dari sekuritas Anda.
+              </p>
+            </details>
+            <details class="faq-item">
+              <summary>Bisakah saya menggunakan kalkulator ini di perangkat mobile?</summary>
+              <p>
+                Bisa. Seluruh antarmuka sudah responsif dan nyaman diakses melalui smartphone maupun tablet.
+              </p>
+            </details>
+          </div>
+          <div class="cta-panel">
+            <div>
+              <h3>Siap membuat keputusan investasi yang lebih presisi?</h3>
+              <p>
+                Mulai gunakan kalkulator yang sesuai dan revisi strategi Anda dengan data yang lebih tajam.
+              </p>
+            </div>
+            <a class="btn primary" href="#kalkulator">Akses Kalkulator</a>
+          </div>
+        </section>
+      </main>
+
+      <footer>
+        Azmi B.Z &copy; 2024. Dikurasi untuk membantu investor ritel Indonesia.
+      </footer>
     </div>
 
     <script>
-        function calculateProfit() {
-            const buyPrice = parseFloat(document.getElementById('buyPrice').value);
-            const sellPrice = parseFloat(document.getElementById('sellPrice').value);
-            const lot = parseInt(document.getElementById('lot').value);
+      const navToggle = document.querySelector(".nav-toggle");
+      const navLinks = document.querySelector(".nav-links");
 
-            if (isNaN(buyPrice) || isNaN(sellPrice) || isNaN(lot) || lot <= 0) {
-                Swal.fire({
-                    title: 'Input Tidak Valid',
-                    text: 'Mohon masukkan data yang valid.',
-                    icon: 'error',
-                    confirmButtonColor: '#3498db'
-                });
-                return;
-            }
+      if (navToggle && navLinks) {
+        navToggle.addEventListener("click", () => {
+          const expanded = navToggle.getAttribute("aria-expanded") === "true";
+          navLinks.classList.toggle("active");
+          navToggle.setAttribute("aria-expanded", String(!expanded));
+        });
+      }
 
-            const sharesPerLot = 100;
-            const totalShares = lot * sharesPerLot;
-            const profitLoss = (sellPrice - buyPrice) * totalShares;
-
-            const resultDiv = document.getElementById('result');
-            resultDiv.style.display = 'block';
-            resultDiv.innerHTML = `
-                Keuntungan: <strong class="${profitLoss > 0 ? 'profit' : ''}">${profitLoss > 0 ? 'Rp ' + profitLoss.toLocaleString() : 'Rp 0'}</strong><br>
-                Kerugian: <strong class="${profitLoss < 0 ? 'loss' : ''}">${profitLoss < 0 ? 'Rp ' + Math.abs(profitLoss).toLocaleString() : 'Rp 0'}</strong>
-            `;
-        }
-
-        function addPurchase() {
-            const purchaseList = document.getElementById('purchaseList');
-            const newPurchase = document.createElement('div');
-            newPurchase.className = 'purchase-inputs';
-            newPurchase.innerHTML = `
-                <label>Harga Pembelian:</label>
-                <input type="number" class="price" placeholder="Masukkan harga">
-                <label>Jumlah Lot:</label>
-                <input type="number" class="lots" placeholder="Masukkan lot" value="1">
-            `;
-            purchaseList.appendChild(newPurchase);
-        }
-
-        function calculateAverage() {
-            const prices = document.getElementsByClassName('price');
-            const lots = document.getElementsByClassName('lots');
-            let totalCost = 0;
-            let totalLots = 0;
-
-            for (let i = 0; i < prices.length; i++) {
-                const price = parseFloat(prices[i].value);
-                const lot = parseInt(lots[i].value);
-
-                if (isNaN(price) || isNaN(lot) || lot <= 0) {
-                    Swal.fire({
-                        title: 'Input Tidak Valid',
-                        text: 'Mohon masukkan data yang valid untuk semua pembelian.',
-                        icon: 'error',
-                        confirmButtonColor: '#3498db'
-                    });
-                    return;
-                }
-
-                totalCost += price * lot * 100;
-                totalLots += lot;
-            }
-
-            const averagePrice = totalCost / (totalLots * 100);
-            const resultDiv = document.getElementById('averageResult');
-            resultDiv.style.display = 'block';
-            resultDiv.innerHTML = `
-                Harga Rata-rata: <strong>Rp ${averagePrice.toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2})}</strong><br>
-                Total Lot: <strong>${totalLots}</strong><br>
-                Total Lembar: <strong>${totalLots * 100}</strong><br>
-                Total Investasi: <strong>Rp ${totalCost.toLocaleString()}</strong>
-            `;
-        }
-
-        function calculateDividend() {
-            const stockPrice = parseFloat(document.getElementById('stockPrice').value);
-            const dividendAmount = parseFloat(document.getElementById('dividendAmount').value);
-            const lot = parseInt(document.getElementById('dividendLot').value);
-
-            if (isNaN(stockPrice) || isNaN(dividendAmount) || isNaN(lot) || lot <= 0) {
-                Swal.fire({
-                    title: 'Input Tidak Valid',
-                    text: 'Mohon masukkan data yang valid.',
-                    icon: 'error',
-                    confirmButtonColor: '#3498db'
-                });
-                return;
-            }
-
-            const sharesPerLot = 100;
-            const totalShares = lot * sharesPerLot;
-            const totalDividend = dividendAmount * totalShares;
-            const dividendYield = (dividendAmount / stockPrice) * 100;
-
-            const resultDiv = document.getElementById('dividendResult');
-            resultDiv.style.display = 'block';
-            resultDiv.innerHTML = `
-                Total Dividen: <strong>Rp ${totalDividend.toLocaleString()}</strong><br>
-                Dividend Yield: <strong>${dividendYield.toFixed(2)}%</strong><br>
-                Total Lembar: <strong>${totalShares.toLocaleString()}</strong>
-            `;
-        }
-
-        function calculateBuy() {
-            const sharePrice = parseFloat(document.getElementById('sharePrice').value);
-            const lot = parseInt(document.getElementById('buyLot').value);
-
-            if (isNaN(sharePrice) || isNaN(lot) || lot <= 0) {
-                Swal.fire({
-                    title: 'Input Tidak Valid',
-                    text: 'Mohon masukkan data yang valid.',
-                    icon: 'error',
-                    confirmButtonColor: '#3498db'
-                });
-                return;
-            }
-
-            const sharesPerLot = 100;
-            const totalShares = lot * sharesPerLot;
-            const grossAmount = sharePrice * totalShares;
-            
-            // Biaya transaksi
-            const brokerageFee = grossAmount * 0.0019; // 0.19% fee broker
-            const levy = grossAmount * 0.0001; // 0.01% levy KSEI
-            const vat = brokerageFee * 0.11; // 11% PPN dari fee broker
-            
-            const totalCost = grossAmount + brokerageFee + levy + vat;
-
-            const resultDiv = document.getElementById('buyResult');
-            resultDiv.style.display = 'block';
-            resultDiv.innerHTML = `
-                Nilai Transaksi: <strong>Rp ${grossAmount.toLocaleString()}</strong><br>
-                Fee Broker: <strong>Rp ${brokerageFee.toLocaleString()}</strong><br>
-                Levy KSEI: <strong>Rp ${levy.toLocaleString()}</strong><br>
-                PPN: <strong>Rp ${vat.toLocaleString()}</strong><br>
-                <hr>
-                Total Bayar: <strong>Rp ${totalCost.toLocaleString()}</strong>
-            `;
-        }
-
-        // Add this new function to your existing script
-        function calculateARAARB() {
-            const closingPrice = parseFloat(document.getElementById('closingPrice').value);
-
-            if (isNaN(closingPrice) || closingPrice <= 0) {
-                Swal.fire({
-                    title: 'Input Tidak Valid',
-                    text: 'Mohon masukkan harga penutupan yang valid.',
-                    icon: 'error',
-                    confirmButtonColor: '#3498db'
-                });
-                return;
-            }
-
-            let araPercentage, arbPercentage;
-
-            // Determine ARA/ARB percentages based on price ranges
-            if (closingPrice < 50) {
-                araPercentage = 35;
-                arbPercentage = 35;
-            } else if (closingPrice < 200) {
-                araPercentage = 25;
-                arbPercentage = 25;
-            } else if (closingPrice < 5000) {
-                araPercentage = 20;
-                arbPercentage = 20;
-            } else {
-                araPercentage = 15;
-                arbPercentage = 15;
-            }
-
-            const ara = closingPrice * (1 + (araPercentage / 100));
-            const arb = closingPrice * (1 - (arbPercentage / 100));
-
-            document.getElementById('araArbResult').style.display = 'block';
-            document.getElementById('araValue').textContent = 'Rp ' + ara.toLocaleString(undefined, {maximumFractionDigits: 0});
-            document.getElementById('arbValue').textContent = 'Rp ' + arb.toLocaleString(undefined, {maximumFractionDigits: 0});
-        }
-
-        // Add these new reset functions
-        function resetProfitCalculator() {
-            document.getElementById('buyPrice').value = '';
-            document.getElementById('sellPrice').value = '';
-            document.getElementById('lot').value = '1';
-            document.getElementById('result').style.display = 'none';
-        }
-
-        function resetAverageCalculator() {
-            const purchaseList = document.getElementById('purchaseList');
-            purchaseList.innerHTML = `
-                <div class="purchase-inputs">
-                    <label>Harga Pembelian:</label>
-                    <input type="number" class="price" placeholder="Masukkan harga">
-                    <label>Jumlah Lot:</label>
-                    <input type="number" class="lots" placeholder="Masukkan lot" value="1">
-                </div>
-            `;
-            document.getElementById('averageResult').style.display = 'none';
-        }
-
-        function resetDividendCalculator() {
-            document.getElementById('stockPrice').value = '';
-            document.getElementById('dividendAmount').value = '';
-            document.getElementById('dividendLot').value = '1';
-            document.getElementById('dividendResult').style.display = 'none';
-        }
-
-        function resetBuyCalculator() {
-            document.getElementById('sharePrice').value = '';
-            document.getElementById('buyLot').value = '1';
-            document.getElementById('buyResult').style.display = 'none';
-        }
-
-        function resetARAARBCalculator() {
-            document.getElementById('closingPrice').value = '';
-            document.getElementById('araArbResult').style.display = 'none';
-        }
+      const links = document.querySelectorAll('.nav-links a');
+      links.forEach((link) => {
+        link.addEventListener('click', () => {
+          if (navLinks.classList.contains('active')) {
+            navLinks.classList.remove('active');
+            navToggle.setAttribute('aria-expanded', 'false');
+          }
+        });
+      });
     </script>
-</body>
+  </body>
 </html>

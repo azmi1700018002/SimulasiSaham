@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kalkulator Harga Rata-rata - Exclusive Tools Saham</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg-gradient: linear-gradient(135deg, #111729 0%, #1c2d4d 50%, #20335a 100%);
+        --soft-surface: rgba(255, 255, 255, 0.06);
+        --card-surface: rgba(19, 31, 53, 0.78);
+        --card-alt: rgba(9, 18, 36, 0.82);
+        --primary: #5b86ff;
+        --primary-strong: #4171ff;
+        --accent: #31d0aa;
+        --accent-strong: #48e6c1;
+        --text-strong: #f5f7ff;
+        --text-soft: rgba(235, 239, 255, 0.76);
+        --border-subtle: rgba(255, 255, 255, 0.12);
+        --shadow-strong: 0 25px 60px rgba(9, 17, 31, 0.5);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+        background: var(--bg-gradient);
+        color: var(--text-soft);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        padding: 32px 18px 80px;
+        position: relative;
+        overflow-x: hidden;
+      }
+
+      body::before,
+      body::after {
+        content: "";
+        position: fixed;
+        border-radius: 50%;
+        filter: blur(95px);
+        z-index: 0;
+        opacity: 0.55;
+      }
+
+      body::before {
+        width: 420px;
+        height: 420px;
+        background: rgba(91, 134, 255, 0.32);
+        top: -140px;
+        left: -160px;
+      }
+
+      body::after {
+        width: 380px;
+        height: 380px;
+        background: rgba(49, 208, 170, 0.28);
+        bottom: -120px;
+        right: -140px;
+      }
+
+      .floating-orbs span {
+        position: fixed;
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.15), rgba(22, 34, 57, 0));
+        animation: float 12s ease-in-out infinite;
+        opacity: 0.45;
+      }
+
+      .floating-orbs span:nth-child(1) {
+        top: 18%;
+        right: 10%;
+        animation-delay: -2s;
+      }
+
+      .floating-orbs span:nth-child(2) {
+        top: 60%;
+        left: 8%;
+        animation-delay: -6s;
+      }
+
+      .floating-orbs span:nth-child(3) {
+        bottom: 14%;
+        right: 16%;
+        animation-delay: -9s;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate3d(0, 0, 0) scale(1);
+        }
+        50% {
+          transform: translate3d(0, -24px, 0) scale(1.06);
+        }
+      }
+
+      .page {
+        width: 100%;
+        max-width: 980px;
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+      }
+
+      .mini-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        padding: 16px 24px;
+        border-radius: 18px;
+        border: 1px solid var(--border-subtle);
+        background: rgba(18, 29, 50, 0.72);
+        box-shadow: var(--shadow-strong);
+      }
+
+      .brand {
+        font-weight: 700;
+        font-size: 1.1rem;
+        letter-spacing: 0.4px;
+        color: var(--text-strong);
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .brand span {
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: rgba(91, 134, 255, 0.2);
+        border: 1px solid rgba(91, 134, 255, 0.32);
+        font-size: 0.68rem;
+        font-weight: 600;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+      }
+
+      .back-link {
+        text-decoration: none;
+        color: var(--text-strong);
+        font-weight: 600;
+        letter-spacing: 0.2px;
+        padding: 12px 20px;
+        border-radius: 14px;
+        border: 1px solid var(--border-subtle);
+        background: rgba(8, 18, 35, 0.65);
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+      }
+
+      .back-link:hover,
+      .back-link:focus {
+        transform: translateY(-2px);
+        border-color: rgba(91, 134, 255, 0.45);
+        background: rgba(8, 18, 35, 0.82);
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+      }
+
+      .calc-hero {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 0 4px;
+      }
+
+      .calc-badge {
+        align-self: flex-start;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: rgba(91, 134, 255, 0.18);
+        border: 1px solid rgba(91, 134, 255, 0.3);
+        font-size: 0.75rem;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: var(--text-strong);
+        font-weight: 600;
+      }
+
+      .calc-hero h1 {
+        margin: 0;
+        color: var(--text-strong);
+        font-size: clamp(2.1rem, 5vw, 2.9rem);
+        letter-spacing: -0.03em;
+      }
+
+      .calc-hero p {
+        margin: 0;
+        max-width: 640px;
+        line-height: 1.65;
+      }
+
+      .calc-card {
+        background: var(--card-surface);
+        border-radius: 26px;
+        border: 1px solid var(--border-subtle);
+        box-shadow: var(--shadow-strong);
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+
+      .form-grid {
+        display: grid;
+        gap: 20px;
+      }
+
+      .input-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      label {
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        color: var(--text-strong);
+        font-weight: 600;
+      }
+
+      input,
+      select {
+        width: 100%;
+        padding: 14px 18px;
+        border-radius: 14px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        background: rgba(8, 18, 35, 0.82);
+        color: var(--text-strong);
+        font-size: 1rem;
+        font-weight: 500;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease, background 0.2s ease;
+      }
+
+      input::placeholder {
+        color: rgba(200, 209, 237, 0.55);
+      }
+
+      input:focus,
+      select:focus {
+        outline: none;
+        border-color: rgba(91, 134, 255, 0.6);
+        box-shadow: 0 0 0 3px rgba(91, 134, 255, 0.16);
+        transform: translateY(-1px);
+        background: rgba(12, 22, 39, 0.92);
+      }
+
+      input:hover,
+      select:hover {
+        border-color: rgba(91, 134, 255, 0.4);
+      }
+
+      .helper {
+        font-size: 0.92rem;
+        color: rgba(227, 233, 255, 0.72);
+        line-height: 1.6;
+        border-left: 3px solid rgba(91, 134, 255, 0.35);
+        padding-left: 14px;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 14px 24px;
+        border-radius: 14px;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        cursor: pointer;
+        border: none;
+        text-decoration: none;
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+      }
+
+      .btn.primary {
+        background: linear-gradient(120deg, var(--primary), var(--primary-strong));
+        color: #061021;
+        box-shadow: 0 18px 45px rgba(65, 113, 255, 0.45);
+      }
+
+      .btn.primary:hover,
+      .btn.primary:focus {
+        transform: translateY(-2px);
+        box-shadow: 0 24px 55px rgba(65, 113, 255, 0.55);
+      }
+
+      .btn.secondary {
+        background: rgba(8, 18, 36, 0.78);
+        color: var(--text-strong);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+      }
+
+      .btn.secondary:hover,
+      .btn.secondary:focus {
+        transform: translateY(-2px);
+        background: rgba(8, 18, 36, 0.92);
+        border-color: rgba(91, 134, 255, 0.38);
+      }
+
+      .btn.accent {
+        background: linear-gradient(120deg, var(--accent), var(--accent-strong));
+        color: #041018;
+        box-shadow: 0 18px 45px rgba(49, 208, 170, 0.32);
+      }
+
+      .btn.accent:hover,
+      .btn.accent:focus {
+        transform: translateY(-2px);
+        box-shadow: 0 24px 55px rgba(49, 208, 170, 0.42);
+      }
+
+      .btn.full {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .result-card {
+        display: none;
+        margin-top: 4px;
+        padding: 24px;
+        background: var(--card-alt);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+        line-height: 1.8;
+        color: var(--text-soft);
+        box-shadow: 0 14px 38px rgba(5, 12, 24, 0.48);
+      }
+
+      .result-card.visible {
+        display: block;
+      }
+
+      .result-card strong {
+        color: var(--text-strong);
+      }
+
+      .result-card .profit {
+        color: #31d0aa;
+      }
+
+      .result-card .loss {
+        color: #ff6b6b;
+      }
+
+      .grid-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 16px;
+      }
+
+      .info-box {
+        background: rgba(8, 18, 36, 0.78);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 18px;
+        padding: 18px;
+        text-align: center;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .info-box:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 18px 40px rgba(6, 14, 28, 0.45);
+      }
+
+      .info-box strong {
+        display: block;
+        margin-top: 10px;
+        color: var(--text-strong);
+        font-size: 1.2rem;
+      }
+
+      .info-note {
+        margin-top: 18px;
+        font-size: 0.92rem;
+        color: rgba(227, 233, 255, 0.72);
+        line-height: 1.6;
+        background: rgba(8, 18, 36, 0.72);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 16px;
+        padding: 16px 20px;
+      }
+
+      .panel {
+        background: rgba(8, 18, 36, 0.78);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 18px;
+        padding: 20px;
+        display: grid;
+        gap: 14px;
+      }
+
+      .purchase-list {
+        display: grid;
+        gap: 18px;
+        max-height: 420px;
+        overflow-y: auto;
+        padding-right: 4px;
+      }
+
+      .purchase-list::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      .purchase-list::-webkit-scrollbar-track {
+        background: rgba(8, 18, 36, 0.6);
+        border-radius: 4px;
+      }
+
+      .purchase-list::-webkit-scrollbar-thumb {
+        background: rgba(91, 134, 255, 0.45);
+        border-radius: 4px;
+      }
+
+      @media (max-width: 720px) {
+        body {
+          padding: 24px 16px 60px;
+        }
+
+        .mini-header {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .back-link {
+          width: 100%;
+          justify-content: center;
+        }
+
+        .calc-card {
+          padding: 26px;
+        }
+
+        .actions {
+          flex-direction: column;
+        }
+
+        .btn {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="floating-orbs" aria-hidden="true">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+    <div class="page">
+      <header class="mini-header">
+        <a class="brand" href="index.html">
+          Exclusive Tools
+          <span>V5</span>
+        </a>
+        <a class="back-link" href="index.html#kalkulator">← Kembali ke Menu</a>
+      </header>
+
+      <main>
+        <section class="calc-hero">
+          <span class="calc-badge">Kalkulator Saham</span>
+          <h1 id="calc-title">Kalkulator Harga Rata-rata</h1>
+          <p>
+            Gabungkan beberapa transaksi pembelian untuk mendapatkan rata-rata
+            modal per lembar dan per lot. Cocok untuk evaluasi akumulasi saham
+            secara bertahap.
+          </p>
+        </section>
+
+        <section class="calc-card" aria-labelledby="calc-title">
+          <div class="purchase-list" id="purchaseList"></div>
+
+          <button
+            type="button"
+            class="btn accent full"
+            onclick="addPurchase()"
+          >
+            Tambah Pembelian
+          </button>
+
+          <p class="helper">
+            Isi setiap blok dengan harga beli dan jumlah lot yang sesuai.
+            Tambahkan blok baru jika Anda memiliki lebih dari satu transaksi.
+          </p>
+
+          <div class="actions">
+            <button type="button" class="btn primary" onclick="calculateAverage()">
+              Hitung Rata-rata
+            </button>
+            <button type="button" class="btn secondary" onclick="resetCalculator()">
+              Reset
+            </button>
+          </div>
+
+          <div
+            id="result"
+            class="result-card"
+            aria-live="polite"
+            role="status"
+          ></div>
+        </section>
+      </main>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+      const purchaseList = document.getElementById("purchaseList");
+
+      function createPurchasePanel() {
+        const wrapper = document.createElement("div");
+        wrapper.className = "panel purchase-panel";
+        wrapper.innerHTML = `
+          <div class="input-group">
+            <label>Harga Pembelian</label>
+            <input type="number" class="price" placeholder="Contoh: 1500" />
+          </div>
+          <div class="input-group">
+            <label>Jumlah Lot</label>
+            <input type="number" class="lots" placeholder="Contoh: 2" value="1" />
+          </div>
+        `;
+        return wrapper;
+      }
+
+      function addPurchase() {
+        purchaseList.appendChild(createPurchasePanel());
+      }
+
+      function calculateAverage() {
+        const prices = purchaseList.querySelectorAll(".price");
+        const lots = purchaseList.querySelectorAll(".lots");
+
+        if (prices.length === 0) {
+          addPurchase();
+        }
+
+        let totalCost = 0;
+        let totalLots = 0;
+
+        for (let i = 0; i < prices.length; i += 1) {
+          const price = parseFloat(prices[i].value);
+          const lot = parseInt(lots[i].value, 10);
+
+          if (isNaN(price) || isNaN(lot) || lot <= 0) {
+            Swal.fire({
+              title: "Input Tidak Valid",
+              text: "Pastikan seluruh harga dan lot terisi dengan benar.",
+              icon: "error",
+              confirmButtonColor: "#5b86ff",
+            });
+            return;
+          }
+
+          totalCost += price * lot * 100;
+          totalLots += lot;
+        }
+
+        if (totalLots === 0) {
+          Swal.fire({
+            title: "Data Tidak Lengkap",
+            text: "Jumlah lot harus lebih dari nol.",
+            icon: "error",
+            confirmButtonColor: "#5b86ff",
+          });
+          return;
+        }
+
+        const totalShares = totalLots * 100;
+        const averagePrice = totalCost / totalShares;
+        const pricePerLot = averagePrice * 100;
+
+        const formatCurrency = (value) =>
+          value.toLocaleString(undefined, {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          });
+
+        const resultDiv = document.getElementById("result");
+        resultDiv.classList.add("visible");
+        resultDiv.innerHTML = `
+          <strong>Harga Rata-rata</strong><br />
+          Per Lembar: <strong>Rp ${formatCurrency(averagePrice)}</strong><br />
+          Per Lot: <strong>Rp ${formatCurrency(pricePerLot)}</strong><br /><br />
+          <strong>Ringkasan Pembelian</strong><br />
+          Total Lot: ${totalLots.toLocaleString()}<br />
+          Total Lembar: ${totalShares.toLocaleString()}<br />
+          Nilai Transaksi: <strong>Rp ${totalCost.toLocaleString()}</strong>
+        `;
+      }
+
+      function resetCalculator() {
+        purchaseList.innerHTML = "";
+        purchaseList.appendChild(createPurchasePanel());
+        const resultDiv = document.getElementById("result");
+        resultDiv.classList.remove("visible");
+        resultDiv.innerHTML = "";
+      }
+
+      document.addEventListener("DOMContentLoaded", () => {
+        resetCalculator();
+      });
+    </script>
+  </body>
+</html>
